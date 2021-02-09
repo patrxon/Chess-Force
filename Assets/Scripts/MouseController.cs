@@ -4,44 +4,30 @@ using UnityEngine;
 
 public class MouseController
 {
-    private int gridWitdh;
-    private int gridHeight;
+    private readonly int _gridWitdh = 8;
+    private readonly int _gridHeight = 8;
 
-    public MouseController(int width, int height)
+    public bool IsMouseInGrid(Vector2 mousePos) => mousePos.x >= 0 && mousePos.x < _gridWitdh && mousePos.y >= 0 && mousePos.y < _gridHeight;
+
+    private Vector3 GetMousePos()
     {
-        gridHeight = height;
-        gridWitdh = width;
+        Vector2 mousePos;
+        mousePos.x = Input.mousePosition.x;
+        mousePos.y = Input.mousePosition.y;
 
-    }
-
-    public bool IsMouseInGrid(Vector2 mousePos)
-    {
-        if(mousePos.x >= 0 && mousePos.x < gridWitdh && mousePos.y >= 0 && mousePos.y < gridHeight)
-        {
-            return true;
-        }
-
-        return false;
+        return Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
     }
 
     public Vector2Int GetPosInGrid()
     {
-        Vector2 mousePos;
-        mousePos.x = Input.mousePosition.x;
-        mousePos.y = Input.mousePosition.y;
+        Vector3 PosInUnits = GetMousePos();
 
-        Vector3 PosInUnits = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
-
-        return new Vector2Int((int)Mathf.Floor(PosInUnits.x), (int)Mathf.Floor(PosInUnits.y));
+        return new Vector2Int((int)PosInUnits.x, (int)PosInUnits.y);
     }
 
     public Vector2 GetFloatPosInGrid()
     {
-        Vector2 mousePos;
-        mousePos.x = Input.mousePosition.x;
-        mousePos.y = Input.mousePosition.y;
-
-        Vector3 PosInUnits = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
+        Vector3 PosInUnits = GetMousePos();
 
         return new Vector2(PosInUnits.x, PosInUnits.y);
     }

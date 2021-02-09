@@ -4,20 +4,16 @@ using UnityEngine;
 
 public class GridNode
 {
-    public Vector2Int position { get; set; }
-    public Piece piece { get; set; } = null;
-    public bool change { get; set; } = true;
+    public Vector2Int Position { get; set; }
+    public Piece Piece { get; set; } = null;
+    public bool Change { get; set; } = true;
 
-    public GridNode(int x, int y)
-    {
-        position = new Vector2Int(x, y);
-        piece = null;
-    }
-
+    public GridNode(int x, int y) => Position = new Vector2Int(x, y);
+    
     public void MovePiece(Piece piece)
     {
-        this.piece = piece;
-        change = true;
+        Piece = piece;
+        Change = true;
     }
 
 }

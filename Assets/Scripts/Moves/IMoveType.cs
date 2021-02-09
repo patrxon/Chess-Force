@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface MoveType
+public interface IMoveType
 {
-    string moveName { get; set; }
+    string MoveName { get; set; }
+
     void MakeMove(GridNode selectedNode, Vector2Int destination);
     bool TestMove(GridNode selectedNode, Vector2Int destination);
 

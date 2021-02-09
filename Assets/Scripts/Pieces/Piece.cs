@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class Piece
 {
-    public Move[] moveSet { get; set; }
-    public int cost { get; set; }
-    public string name { get; set; }
-    public int side { get; set; }
-    public int movesMade { get; set; } = 0;
-    protected PieceContainer pc { get; }
+    public Move[] MoveSet { get; set; }
+    public int Cost { get; set; }
+    public string Name { get; set; }
+    public int Side { get; set; }
+    public int MovesMade { get; set; } = 0;
+    protected PieceContainer PieceContainer { get; }
 
     public Piece(int side)
     {
-        this.side = side;
-        pc = new PieceContainer();
+        Side = side;
+        PieceContainer = new PieceContainer();
     }
 
     public bool MakeMove(GridNode selectedNode, Vector2Int destination)
     {
-        foreach (Move move in moveSet)
+        foreach (Move move in MoveSet)
         { 
-            foreach (Vector2Int point in move.pointList)
+            foreach (Vector2Int point in move.PointList)
             {
-                if (point + selectedNode.position == destination)
+                if (point + selectedNode.Position == destination)
                 {
-                    if (move.moveType.TestMove(selectedNode, destination))
+                    if (move.MoveType.TestMove(selectedNode, destination))
                     {
-                        move.moveType.MakeMove(selectedNode, destination);
+                        move.MoveType.MakeMove(selectedNode, destination);
                         return true;
                     }
                 }
@@ -37,24 +37,24 @@ public class Piece
         return false;
     }
 
-    public Dictionary<string, List<Vector2Int>> getLegalMoves(GridNode selectedNode)
+    public Dictionary<string, List<Vector2Int>> GetLegalMoves(GridNode selectedNode)
     {
         Dictionary<string, List<Vector2Int>> legalMoves = new Dictionary<string, List<Vector2Int>>();
 
-        foreach (Move move in moveSet)
+        foreach (Move move in MoveSet)
         {
             List<Vector2Int> legalMove = new List<Vector2Int>();
 
-            foreach (Vector2Int point in move.pointList)
+            foreach (Vector2Int point in move.PointList)
             {
-                Vector2Int destination = point + selectedNode.position;
-                if (move.moveType.TestMove(selectedNode, destination))
+                Vector2Int destination = point + selectedNode.Position;
+                if (move.MoveType.TestMove(selectedNode, destination))
                 {
                     legalMove.Add(destination);
                 }
             }
        
-            legalMoves[move.moveType.moveName] = legalMove;
+            legalMoves[move.MoveType.MoveName] = legalMove;
         }
          
         return legalMoves;

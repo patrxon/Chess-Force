@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class King : Piece
 {
-    public King(int side, GridNode[,] gridNode) : base(side)
+    public King(int side, GridNode[][] gridNode) : base(side)
     {
-        this.name = "King";
-        this.cost = 20;
+        this.Name = "King";
+        this.Cost = 20;
         SetupMoves(gridNode);
     }
 
-    public void SetupMoves(GridNode[,] gridNode)
+    public void SetupMoves(GridNode[][] gridNode)
     {
-        moveSet = new Move[1];
+        MoveSet = new Move[1];
 
-        List<Vector2Int> pointList1 = pc.LineMoveCreator("11111111", side);
-        moveSet[0] = new Move(new AttackMove(gridNode), pointList1);
+        List<Vector2Int> pointList1 = PieceContainer.LineMoveCreator("11111111", Side);
+        MoveSet[0] = new Move(new AttackMove(gridNode), pointList1);
     }
 }

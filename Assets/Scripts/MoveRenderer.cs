@@ -4,37 +4,31 @@ using UnityEngine;
 
 public class MoveRenderer : MonoBehaviour
 {
-    [SerializeField] Sprite[] moveSprites;
-    GridNode[,] gridNodes;
-    List<GameObject> moves;
+    [SerializeField] private Sprite[] _moveSprites;
+    private List<GameObject> _moves;
 
-    private Dictionary<string, Sprite> spriteDictionary;
+    private Dictionary<string, Sprite> _spriteDictionary;
 
     void Start()
     {
-        moves = new List<GameObject>();
-        spriteDictionary = new Dictionary<string, Sprite>();
-        foreach (Sprite figure in moveSprites)
+        _moves = new List<GameObject>();
+        _spriteDictionary = new Dictionary<string, Sprite>();
+        foreach (Sprite figure in _moveSprites)
         {
-            spriteDictionary[figure.name] = figure;
+            _spriteDictionary[figure.name] = figure;
         }
-    }
-
-    public void SetGridNodes(GridNode[,] gridNodes)
-    {
-        this.gridNodes = gridNodes;
     }
 
     public void showMoves(GridNode selectedNode)
     {
         HideMoves();
 
-        Piece selectedPiece = selectedNode.piece;
-        Dictionary<string, List<Vector2Int>> legalMoves = selectedPiece.getLegalMoves(selectedNode);
+        Piece selectedPiece = selectedNode.Piece;
+        Dictionary<string, List<Vector2Int>> legalMoves = selectedPiece.GetLegalMoves(selectedNode);
 
-        foreach(KeyValuePair<string,List < Vector2Int >> move in legalMoves)
+        foreach (KeyValuePair<string, List<Vector2Int>> move in legalMoves)
         {
-            foreach(Vector2Int point in move.Value)
+            foreach (Vector2Int point in move.Value)
             {
                 ShowMove(move.Key, point);
             }
@@ -54,14 +48,14 @@ public class MoveRenderer : MonoBehaviour
 
         newMove.AddComponent(typeof(SpriteRenderer));
         SpriteRenderer spriteRenderer = newMove.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = spriteDictionary[moveType];
+        spriteRenderer.sprite = _spriteDictionary[moveType];
 
-        moves.Add(newMove);
+        _moves.Add(newMove);
     }
 
     public void HideMoves()
     {
-        foreach(GameObject move in moves)
+        foreach (GameObject move in _moves)
         {
             GameObject.Destroy(move);
         }

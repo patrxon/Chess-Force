@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class SelectorControler : MonoBehaviour
 {
-    [SerializeField] GameObject selector;
-    SpriteRenderer spriteRenderer;
+    [SerializeField] private GameObject _selector;
+    private SpriteRenderer _spriteRenderer;
 
     void Start()
     {
-        spriteRenderer = selector.GetComponent<SpriteRenderer>();
+        _spriteRenderer = _selector.GetComponent<SpriteRenderer>();
         HideSelector();
     }
 
     public void SelectPiece(Vector2Int pos)
     {
-        selector.transform.localPosition = new Vector3(pos.x, pos.y, 0);
-        spriteRenderer.enabled = true;
+        _selector.transform.localPosition = new Vector3(pos.x, pos.y, 0);
+        _spriteRenderer.enabled = true;
     }
 
-    public void HideSelector()
-    {
-        spriteRenderer.enabled = false;
-    }
+    public void HideSelector() => _spriteRenderer.enabled = false;
+    
     
 }

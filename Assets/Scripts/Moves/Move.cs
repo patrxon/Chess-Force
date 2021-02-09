@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Move
 {
-    public MoveType moveType { get; }
-    public List<Vector2Int> pointList { get; }
+    public IMoveType MoveType { get; }
+    public List<Vector2Int> PointList { get; }
 
-    public Move(MoveType moveType ,List<Vector2Int> pointList)
+    public Move(IMoveType moveType, List<Vector2Int> pointList)
     {
-        this.pointList = pointList;
-        this.moveType = moveType;
+        PointList = pointList;
+        MoveType = moveType;
     }
 }

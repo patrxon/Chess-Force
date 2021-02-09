@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class PureAtttack : GenericMove
 {
-    public PureAtttack(GridNode[,] gridNodes)
+    public PureAtttack(GridNode[][] gridNodes)
     {
-        this.gridNodes = gridNodes;
-        moveName = "PureAttack";
+        GridNodes = gridNodes;
+        MoveName = "PureAttack";
         attack = true;
     }
 
-    override
-    public void MakeMove(GridNode selectedNode, Vector2Int destination)
+    public override void MakeMove(GridNode selectedNode, Vector2Int destination)
     {
-        Vector2Int source = selectedNode.position;
-        Piece piece = gridNodes[source.x, source.y].piece;
-        gridNodes[destination.x, destination.y].MovePiece(piece);
-        gridNodes[source.x, source.y].MovePiece(null);
-        piece.movesMade += 1;
+        Vector2Int source = selectedNode.Position;
+        Piece piece = GridNodes[source.x][source.y].Piece;
+        GridNodes[destination.x][destination.y].MovePiece(piece);
+        GridNodes[source.x][source.y].MovePiece(null);
+        piece.MovesMade += 1;
     }
 
-    override
-    public bool TestMove(GridNode selectedNode, Vector2Int destination)
+    public override bool TestMove(GridNode selectedNode, Vector2Int destination)
     { 
         if (!IsInBounds(selectedNode, destination))
         {

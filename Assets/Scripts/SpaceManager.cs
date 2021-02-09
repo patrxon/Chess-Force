@@ -5,94 +5,95 @@ using UnityEngine;
 public class SpaceManager : MonoBehaviour
 {
 
-    [SerializeField] int width = 8;
-    [SerializeField] int height = 8;
+    private readonly int _width = 8;
+    private readonly int _height = 8;
+    [SerializeField] private PieceRenderer _pieceRenderer;
+    [SerializeField] private MoveRenderer _moveRenderer;
+    [SerializeField] private SelectorControler _selectorControler;
 
-    GridNode[,] gridNodes;
-    GameObject[,] pieces;
+    private GridNode[][] _gridNodes;
+    private GameObject[][] _pieces;
 
-    [SerializeField] PieceRenderer pieceRenderer;
-    [SerializeField] MoveRenderer moveRenderer;
-    [SerializeField] SelectorControler selectorControler;
-    MouseController mouseController;
-    
-    GridNode selectedNode = null;
-    bool followPiece = false;
-    Vector2 onClickOffset;
+    private MouseController _mouseController;
+    private GridNode _selectedNode = null;
+
+    bool followPiece = false; //temp
+    Vector2 onClickOffset; //temp
 
     void Start()
     {
-        gridNodes = new GridNode[width, height];
-        mouseController = new MouseController(width, height);
+        _mouseController = new MouseController();
         InitGrid();
     }
 
-    void InitGrid()
+    private void InitGrid()
     {
-        for(int x = 0; x < width; x++)
+        _gridNodes = new GridNode[_width][];
+
+        for (int x = 0; x < _width; x++)
         {
-            for(int y = 0; y < height; y++)
+            _gridNodes[x] = new GridNode[_height];
+
+            for (int y = 0; y < _height; y++)
             {
-                gridNodes[x, y] = new GridNode(x, y);
-                
+                _gridNodes[x][y] = new GridNode(x, y);
             }
         }
     }
 
-    void TestStart()
+    private void TestStart()
     {
-        pieces = pieceRenderer.GetPieces();
-        pieceRenderer.SetGridNodes(gridNodes);
-        moveRenderer.SetGridNodes(gridNodes);
+        _pieces = _pieceRenderer.Pieces;
+        _pieceRenderer.SetGridNodes(_gridNodes);
 
         setupBoard(1, 1, 0);
         setupBoard(-1, 6, 7);
 
-        pieceRenderer.RefreshBoard();
+        _pieceRenderer.RefreshBoard();
     }
 
-    void  setupBoard(int side, int lp, int lf)
+    private void setupBoard(int side, int lp, int lf)
     {
         for (int i = 1; i < 7; i++)
         {
-            gridNodes[i, lp].piece = new Pawn(side, gridNodes);
+            _gridNodes[i][lp].Piece = new Pawn(side, _gridNodes);
         }
 
-        gridNodes[0, lp].piece = new Squire(side, gridNodes);
-        gridNodes[7, lp].piece = new Fort(side, gridNodes);
-        gridNodes[0, lf].piece = new Rook(side, gridNodes);
-        gridNodes[1, lf].piece = new Knight(side, gridNodes);
-        gridNodes[2, lf].piece = new Bishop(side, gridNodes);
-        gridNodes[3, lf].piece = new Queen(side, gridNodes);
-        gridNodes[4, lf].piece = new King(side, gridNodes);
-        gridNodes[5, lf].piece = new Bishop(side, gridNodes);
-        gridNodes[6, lf].piece = new Knight(side, gridNodes);
-        gridNodes[7, lf].piece = new Rook(side, gridNodes);
+        _gridNodes[0][lp].Piece = new Squire(side, _gridNodes);
+        _gridNodes[7][lp].Piece = new Fort(side, _gridNodes);
+        _gridNodes[0][lf].Piece = new Rook(side, _gridNodes);
+        _gridNodes[1][lf].Piece = new Knight(side, _gridNodes);
+        _gridNodes[2][lf].Piece = new Bishop(side, _gridNodes);
+        _gridNodes[3][lf].Piece = new Queen(side, _gridNodes);
+        _gridNodes[4][lf].Piece = new King(side, _gridNodes);
+        _gridNodes[5][lf].Piece = new Bishop(side, _gridNodes);
+        _gridNodes[6][lf].Piece = new Knight(side, _gridNodes);
+        _gridNodes[7][lf].Piece = new Rook(side, _gridNodes);
     }
 
-    [SerializeField] bool makeTest = false;
+    [SerializeField] bool makeTest = false; //temp
 
     void Update()
     {
-        if(makeTest)
+        if (makeTest)
         {
             makeTest = false;
-            TestStart();       
+            TestStart();
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             GrabPiece();
         }
 
-        if(followPiece)
+        if (followPiece)
         {
             FollowMouse();
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            if (selectedNode != null)
+            if (_selectedNode != null)
             {
                 ReleasPiece();
             }
@@ -101,50 +102,50 @@ public class SpaceManager : MonoBehaviour
 
     private void GrabPiece()
     {
-        Vector2Int mousePos = mouseController.GetPosInGrid();
+        Vector2Int mousePos = _mouseController.GetPosInGrid();
 
-        if (mouseController.IsMouseInGrid(mousePos) && gridNodes[mousePos.x, mousePos.y].piece != null)
+        if (_mouseController.IsMouseInGrid(mousePos) && _gridNodes[mousePos.x][mousePos.y].Piece != null)
         {
-            selectedNode = gridNodes[mousePos.x, mousePos.y];
-            moveRenderer.showMoves(selectedNode);
-            selectorControler.SelectPiece(mousePos);
+            _selectedNode = _gridNodes[mousePos.x][mousePos.y];
+            _moveRenderer.showMoves(_selectedNode);
+            _selectorControler.SelectPiece(mousePos);
             followPiece = true;
-            onClickOffset = mouseController.GetFloatPosInGrid() - mousePos;
+            onClickOffset = _mouseController.GetFloatPosInGrid() - mousePos;
         }
     }
 
     private void ReleasPiece()
     {
-        Vector2Int mousePos = mouseController.GetPosInGrid();
+        Vector2Int mousePos = _mouseController.GetPosInGrid();
         followPiece = false;
 
-        Vector2Int prevPos = selectedNode.position;
-        pieces[prevPos.x, prevPos.y].transform.localPosition = new Vector3(prevPos.x, prevPos.y, 0);
+        Vector2Int prevPos = _selectedNode.Position;
+        _pieces[prevPos.x][prevPos.y].transform.localPosition = new Vector3(prevPos.x, prevPos.y, 0);
 
-        if (mouseController.IsMouseInGrid(mousePos) && selectedNode != null)
+        if (_mouseController.IsMouseInGrid(mousePos) && _selectedNode != null)
         {
-            Piece piece = selectedNode.piece;
-            
-            bool moved = piece.MakeMove(selectedNode, mousePos);
- 
+            Piece piece = _selectedNode.Piece;
+
+            bool moved = piece.MakeMove(_selectedNode, mousePos);
+
             if (moved)
             {
-                pieceRenderer.RefreshBoard();
-                selectorControler.HideSelector();
-                moveRenderer.HideMoves();
-                selectedNode = null;
+                _pieceRenderer.RefreshBoard();
+                _selectorControler.HideSelector();
+                _moveRenderer.HideMoves();
+                _selectedNode = null;
             }
         }
     }
 
     private void FollowMouse()
     {
-        Vector2Int prevPos = selectedNode.position;
-        Vector2 mousePos = mouseController.GetFloatPosInGrid();
+        Vector2Int prevPos = _selectedNode.Position;
+        Vector2 mousePos = _mouseController.GetFloatPosInGrid();
 
         Vector3 newPos = new Vector3(mousePos.x - onClickOffset.x, mousePos.y - onClickOffset.y, -2);
 
-        pieces[prevPos.x, prevPos.y].transform.localPosition = newPos;
+        _pieces[prevPos.x][prevPos.y].transform.localPosition = newPos;
     }
 
 

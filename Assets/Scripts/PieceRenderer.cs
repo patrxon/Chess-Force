@@ -5,61 +5,53 @@ using UnityEngine;
 public class PieceRenderer : MonoBehaviour
 {
 
-    [SerializeField] int width = 8;
-    [SerializeField] int height = 8;
+    private readonly int _width = 8;
+    private readonly int _height = 8;
 
-    [SerializeField] Sprite[] figureSprites;
-    private Dictionary<string, Sprite> spriteDictionary;
+    [SerializeField] private Sprite[] _figureSprites;
+    private Dictionary<string, Sprite> _spriteDictionary;
 
-    GridNode[,] gridNodes;
-    GameObject[,] pieces;
+    private GridNode[][] _gridNodes;
 
-    int count = 0;
+    public GameObject[][] Pieces { get; set; }
 
-   
     void Start()
     {
-        pieces = new GameObject[width, height];
+        Pieces = new GameObject[_width][];
 
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            Pieces[x] = new GameObject[_height];
+
+            for (int y = 0; y < _height; y++)
             {
-                pieces[x, y] = null;
+                Pieces[x][y] = null;
             }
         }
 
-        spriteDictionary = new Dictionary<string, Sprite>();
-        foreach (Sprite figure in figureSprites)
+        _spriteDictionary = new Dictionary<string, Sprite>();
+        foreach (Sprite figure in _figureSprites)
         {
-            spriteDictionary[figure.name] = figure;
+            _spriteDictionary[figure.name] = figure;
         }
     }
 
-    public GameObject[,] GetPieces()
-    {
-        return pieces;
-    }
-
-    public void SetGridNodes(GridNode[,] gridNodes)
-    {
-        this.gridNodes = gridNodes;
-    }
+    public void SetGridNodes(GridNode[][] gridNodes) => _gridNodes = gridNodes;
 
     public void RefreshBoard()
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
-                if (gridNodes[x, y].change)
+                if (_gridNodes[x][y].Change)
                 {
                     DestroyPiece(x, y);
-                    if (gridNodes[x, y].piece != null)
+                    if (_gridNodes[x][y].Piece != null)
                     {
-                        AddPiece(gridNodes[x, y].piece, x, y);
+                        AddPiece(_gridNodes[x][y].Piece, x, y);
                     }
-                    gridNodes[x, y].change = false;
+                    _gridNodes[x][y].Change = false;
                 }
             }
         }
@@ -69,8 +61,7 @@ public class PieceRenderer : MonoBehaviour
     {
         Transform parent = this.gameObject.transform;
 
-        GameObject newPiece = new GameObject(piece.name);
-        count++;
+        GameObject newPiece = new GameObject(piece.Name);
         Transform transform = newPiece.transform;
         transform.SetParent(parent);
         transform.localPosition = new Vector3(parent.position.x + posx - 0.5f, parent.position.y + posy - 0.5f , 0);
@@ -78,19 +69,17 @@ public class PieceRenderer : MonoBehaviour
 
         newPiece.AddComponent(typeof(SpriteRenderer));
         SpriteRenderer spriteRenderer = newPiece.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = spriteDictionary[piece.name];
+        spriteRenderer.sprite = _spriteDictionary[piece.Name];
 
-        if(piece.side == -1)
+        if(piece.Side == -1)
         {
             spriteRenderer.color = new Color(0.2f, 0.2f, 0.2f);
         }
 
-        pieces[posx,posy] = newPiece;
+        Pieces[posx][posy] = newPiece;
     }
     
-    public void DestroyPiece(int posx, int posy)
-    {
-        GameObject.Destroy(pieces[posx, posy]);
-    }
+    public void DestroyPiece(int posx, int posy) => GameObject.Destroy(Pieces[posx][posy]);
+    
 
 }
