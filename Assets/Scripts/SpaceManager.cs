@@ -10,6 +10,7 @@ public class SpaceManager : MonoBehaviour
     [SerializeField] private PieceRenderer _pieceRenderer;
     [SerializeField] private MoveRenderer _moveRenderer;
     [SerializeField] private SelectorControler _selectorControler;
+    [SerializeField] private SpaceHighlighter _spaceHighlighter;
 
     private GridNode[][] _gridNodes;
     private GameObject[][] _pieces;
@@ -45,14 +46,16 @@ public class SpaceManager : MonoBehaviour
     {
         _pieces = _pieceRenderer.Pieces;
         _pieceRenderer.SetGridNodes(_gridNodes);
+        _spaceHighlighter.SetupGrid(_gridNodes);
 
-        setupBoard(1, 1, 0);
-        setupBoard(-1, 6, 7);
+        SetupBoard(1, 1, 0);
+        SetupBoard(-1, 6, 7);
 
+        _spaceHighlighter.ShowControl();
         _pieceRenderer.RefreshBoard();
     }
 
-    private void setupBoard(int side, int lp, int lf)
+    private void SetupBoard(int side, int lp, int lf)
     {
         for (int i = 1; i < 7; i++)
         {
@@ -133,6 +136,7 @@ public class SpaceManager : MonoBehaviour
                 _pieceRenderer.RefreshBoard();
                 _selectorControler.HideSelector();
                 _moveRenderer.HideMoves();
+                _spaceHighlighter.ShowControl();
                 _selectedNode = null;
             }
         }

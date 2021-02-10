@@ -8,6 +8,7 @@ public interface IMoveType
 
     void MakeMove(GridNode selectedNode, Vector2Int destination);
     bool TestMove(GridNode selectedNode, Vector2Int destination);
+    bool TestAttacking(GridNode selectedNode, Vector2Int destination);
 
     bool IsInBounds(GridNode selectedNode, Vector2Int destination);
     bool IsSpaceEmpty(GridNode selectedNode, Vector2Int destination);

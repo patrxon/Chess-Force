@@ -9,6 +9,7 @@ public class Piece
     public string Name { get; set; }
     public int Side { get; set; }
     public int MovesMade { get; set; } = 0;
+    public Vector2Int Position { get; set; }
     protected PieceContainer PieceContainer { get; }
 
     public Piece(int side)
@@ -20,7 +21,7 @@ public class Piece
     public bool MakeMove(GridNode selectedNode, Vector2Int destination)
     {
         foreach (Move move in MoveSet)
-        { 
+        {
             foreach (Vector2Int point in move.PointList)
             {
                 if (point + selectedNode.Position == destination)
@@ -53,10 +54,10 @@ public class Piece
                     legalMove.Add(destination);
                 }
             }
-       
+
             legalMoves[move.MoveType.MoveName] = legalMove;
         }
-         
+
         return legalMoves;
     }
 

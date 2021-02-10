@@ -26,7 +26,7 @@ public class JumpAttackMove : GenericMove
         {
             return false;
         }
-
+        
         if (!IsSpaceEmpty(selectedNode, destination) && IsOnSameSide(selectedNode, destination))
         {
             return false;
