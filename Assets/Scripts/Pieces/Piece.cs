@@ -63,7 +63,10 @@ public class Piece
 
     public virtual void EndTurnEffect() { }
     public virtual void StartTurnEffect() { }
-    public virtual void AfterMoveEffect() { }
+    public virtual void AfterMoveEffect()
+    {
+        MovesMade += 1;
+    }
     public virtual void AfterKillEffect() { }
     public virtual void AfterDeathEffect() { }
 }

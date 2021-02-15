@@ -17,7 +17,7 @@ public class AttackMove : GenericMove
         Piece piece = GridNodes[source.x][source.y].Piece;
         GridNodes[destination.x][destination.y].MovePiece(piece);
         GridNodes[source.x][source.y].MovePiece(null);
-        piece.MovesMade += 1;
+        piece.AfterMoveEffect();
     }
 
     public override bool TestMove(GridNode selectedNode, Vector2Int destination)

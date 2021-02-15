@@ -9,10 +9,11 @@ public class SpaceHighlighter : MonoBehaviour
 
     private GridNode[][] _gridNodes;
 
-    private GameObject[][] _whiteHighlights;
-    private GameObject[][] _blackHighlights;
+    private SpriteRenderer[][] _whiteHighlights;
+    private SpriteRenderer[][] _blackHighlights;
 
-    [SerializeField] private Sprite _highlight;
+    [SerializeField] private Sprite _highlightWhite;
+    [SerializeField] private Sprite _highlightBlack;
 
     void Start()
     {
@@ -39,8 +40,8 @@ public class SpaceHighlighter : MonoBehaviour
 
     private void CheckNode(GridNode gridNode)
     {
-
         Piece piece = gridNode.Piece;
+        Color increment = new Color(0f, 0f, 0f, 0.1f);
 
         foreach (Move move in piece.MoveSet)
         {
@@ -53,11 +54,13 @@ public class SpaceHighlighter : MonoBehaviour
                 {
                     if (piece.Side == 1)
                     {
-                        _whiteHighlights[destination.x][destination.y].GetComponent<SpriteRenderer>().enabled = true;       
+                        _whiteHighlights[destination.x][destination.y].enabled = true;
+                        _whiteHighlights[destination.x][destination.y].color += increment;
                     }
                     else
                     {
-                        _blackHighlights[destination.x][destination.y].GetComponent<SpriteRenderer>().enabled = true;
+                        _blackHighlights[destination.x][destination.y].enabled = true;
+                        _blackHighlights[destination.x][destination.y].color += increment;
                     }
                 }
             }
@@ -66,23 +69,28 @@ public class SpaceHighlighter : MonoBehaviour
 
     private void ResetHighlights()
     {
+        Color red = new Color(1f, 0f, 0f, 0.2f);
+        Color blue = new Color(0f, 0f, 1f, 0.2f);
+
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                _whiteHighlights[x][y].GetComponent<SpriteRenderer>().enabled = false;
-                _blackHighlights[x][y].GetComponent<SpriteRenderer>().enabled = false;
+                _whiteHighlights[x][y].enabled = false;
+                _whiteHighlights[x][y].color = blue;
+                _blackHighlights[x][y].enabled = false;
+                _blackHighlights[x][y].color = red;
             }
         }
     }
 
     private void SetupWhiteHighlights()
     {
-        _whiteHighlights = new GameObject[_width][];
+        _whiteHighlights = new SpriteRenderer[_width][];
 
         for (int x = 0; x < _width; x++)
         {
-            _whiteHighlights[x] = new GameObject[_height];
+            _whiteHighlights[x] = new SpriteRenderer[_height];
 
             for (int y = 0; y < _height; y++)
             {
@@ -92,11 +100,11 @@ public class SpaceHighlighter : MonoBehaviour
     }
     private void SetupBlackHighlights()
     {
-        _blackHighlights = new GameObject[_width][];
+        _blackHighlights = new SpriteRenderer[_width][];
 
         for (int x = 0; x < _width; x++)
         {
-            _blackHighlights[x] = new GameObject[_height];
+            _blackHighlights[x] = new SpriteRenderer[_height];
 
             for (int y = 0; y < _height; y++)
             {
@@ -105,7 +113,7 @@ public class SpaceHighlighter : MonoBehaviour
         }
     }
 
-    private GameObject MakeHighlight(int posx, int posy, int side)
+    private SpriteRenderer MakeHighlight(int posx, int posy, int side)
     {
         Transform parent = this.gameObject.transform;
 
@@ -117,21 +125,21 @@ public class SpaceHighlighter : MonoBehaviour
 
         newHighlight.AddComponent(typeof(SpriteRenderer));
         SpriteRenderer spriteRenderer = newHighlight.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = _highlight;
-
+       
         if (side == -1)
         {
-            spriteRenderer.color = new Color(1f, 0f, 0f, 0.1f);
-            transform.Rotate(0, 0, 90, Space.Self);
+            spriteRenderer.sprite = _highlightBlack;
+            spriteRenderer.color = new Color(1f, 0f, 0f, 0.2f);
         }
         else
         {
-            spriteRenderer.color = new Color(0f, 0f, 1f, 0.1f);
+            spriteRenderer.sprite = _highlightWhite;
+            spriteRenderer.color = new Color(0f, 0f, 1f, 0.2f);
         }
 
         spriteRenderer.enabled = false;
 
-        return newHighlight;
+        return spriteRenderer;
     }
 
 
