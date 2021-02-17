@@ -12,7 +12,7 @@ public class SpaceManager : MonoBehaviour
     [SerializeField] private SelectorControler _selectorControler;
     [SerializeField] private SpaceHighlighter _spaceHighlighter;
 
-    private GridNode[][] _gridNodes;
+    public static GridNode[][] GridNodes;
     private GameObject[][] _pieces;
 
     private MouseController _mouseController;
@@ -23,21 +23,22 @@ public class SpaceManager : MonoBehaviour
 
     void Start()
     {
+
         _mouseController = new MouseController();
         InitGrid();
     }
 
     private void InitGrid()
     {
-        _gridNodes = new GridNode[_width][];
+        SpaceManager.GridNodes = new GridNode[_width][];
 
         for (int x = 0; x < _width; x++)
         {
-            _gridNodes[x] = new GridNode[_height];
+            SpaceManager.GridNodes[x] = new GridNode[_height];
 
             for (int y = 0; y < _height; y++)
             {
-                _gridNodes[x][y] = new GridNode(x, y);
+                SpaceManager.GridNodes[x][y] = new GridNode(x, y);
             }
         }
     }
@@ -45,8 +46,6 @@ public class SpaceManager : MonoBehaviour
     private void TestStart()
     {
         _pieces = _pieceRenderer.Pieces;
-        _pieceRenderer.SetGridNodes(_gridNodes);
-        _spaceHighlighter.SetupGrid(_gridNodes);
 
         SetupBoard(1, 1, 0);
         SetupBoard(-1, 6, 7);
@@ -59,19 +58,19 @@ public class SpaceManager : MonoBehaviour
     {
         for (int i = 1; i < 7; i++)
         {
-            _gridNodes[i][lp].Piece = new Pawn(side, _gridNodes);
+            SpaceManager.GridNodes[i][lp].Piece = new Pawn(side);
         }
 
-        _gridNodes[0][lp].Piece = new Squire(side, _gridNodes);
-        _gridNodes[7][lp].Piece = new Fort(side, _gridNodes);
-        _gridNodes[0][lf].Piece = new Rook(side, _gridNodes);
-        _gridNodes[1][lf].Piece = new Knight(side, _gridNodes);
-        _gridNodes[2][lf].Piece = new Bishop(side, _gridNodes);
-        _gridNodes[3][lf].Piece = new Queen(side, _gridNodes);
-        _gridNodes[4][lf].Piece = new King(side, _gridNodes);
-        _gridNodes[5][lf].Piece = new Bishop(side, _gridNodes);
-        _gridNodes[6][lf].Piece = new Knight(side, _gridNodes);
-        _gridNodes[7][lf].Piece = new Rook(side, _gridNodes);
+        SpaceManager.GridNodes[0][lp].Piece = new Squire(side);
+        SpaceManager.GridNodes[7][lp].Piece = new Fort(side);
+        SpaceManager.GridNodes[0][lf].Piece = new Rook(side);
+        SpaceManager.GridNodes[1][lf].Piece = new Knight(side);
+        SpaceManager.GridNodes[2][lf].Piece = new Bishop(side);
+        SpaceManager.GridNodes[3][lf].Piece = new Queen(side);
+        SpaceManager.GridNodes[4][lf].Piece = new King(side);
+        SpaceManager.GridNodes[5][lf].Piece = new Bishop(side);
+        SpaceManager.GridNodes[6][lf].Piece = new Knight(side);
+        SpaceManager.GridNodes[7][lf].Piece = new Rook(side);
     }
 
     [SerializeField] bool makeTest = false; //temp
@@ -107,9 +106,9 @@ public class SpaceManager : MonoBehaviour
     {
         Vector2Int mousePos = _mouseController.GetPosInGrid();
 
-        if (_mouseController.IsMouseInGrid(mousePos) && _gridNodes[mousePos.x][mousePos.y].Piece != null)
+        if (_mouseController.IsMouseInGrid(mousePos) && SpaceManager.GridNodes[mousePos.x][mousePos.y].Piece != null)
         {
-            _selectedNode = _gridNodes[mousePos.x][mousePos.y];
+            _selectedNode = SpaceManager.GridNodes[mousePos.x][mousePos.y];
             _moveRenderer.showMoves(_selectedNode);
             _selectorControler.SelectPiece(mousePos);
             followPiece = true;

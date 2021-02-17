@@ -7,8 +7,6 @@ public class SpaceHighlighter : MonoBehaviour
     private readonly int _width = 8;
     private readonly int _height = 8;
 
-    private GridNode[][] _gridNodes;
-
     private SpriteRenderer[][] _whiteHighlights;
     private SpriteRenderer[][] _blackHighlights;
 
@@ -21,8 +19,6 @@ public class SpaceHighlighter : MonoBehaviour
         SetupBlackHighlights();
     }
 
-    public void SetupGrid(GridNode[][] gridNodes) => _gridNodes = gridNodes;
-
     public void ShowControl()
     {
         ResetHighlights();
@@ -30,9 +26,9 @@ public class SpaceHighlighter : MonoBehaviour
         {
             for (int y = 0; y < _height; y++)
             {
-                if (_gridNodes[x][y].Piece != null)
+                if (SpaceManager.GridNodes[x][y].Piece != null)
                 {
-                    CheckNode(_gridNodes[x][y]);
+                    CheckNode(SpaceManager.GridNodes[x][y]);
                 }
             }
         }

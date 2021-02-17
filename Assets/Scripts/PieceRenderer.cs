@@ -11,8 +11,6 @@ public class PieceRenderer : MonoBehaviour
     [SerializeField] private Sprite[] _figureSprites;
     private Dictionary<string, Sprite> _spriteDictionary;
 
-    private GridNode[][] _gridNodes;
-
     public GameObject[][] Pieces { get; set; }
 
     void Start()
@@ -36,22 +34,20 @@ public class PieceRenderer : MonoBehaviour
         }
     }
 
-    public void SetGridNodes(GridNode[][] gridNodes) => _gridNodes = gridNodes;
-
     public void RefreshBoard()
     {
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                if (_gridNodes[x][y].Change)
+                if (SpaceManager.GridNodes[x][y].Change)
                 {
                     DestroyPiece(x, y);
-                    if (_gridNodes[x][y].Piece != null)
+                    if (SpaceManager.GridNodes[x][y].Piece != null)
                     {
-                        AddPiece(_gridNodes[x][y].Piece, x, y);
+                        AddPiece(SpaceManager.GridNodes[x][y].Piece, x, y);
                     }
-                    _gridNodes[x][y].Change = false;
+                    SpaceManager.GridNodes[x][y].Change = false;
                 }
             }
         }

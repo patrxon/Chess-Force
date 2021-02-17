@@ -16,7 +16,10 @@ public class Piece
     {
         Side = side;
         PieceContainer = new PieceContainer();
+        SetupMoves();
     }
+
+    public virtual void SetupMoves() { }
 
     public bool MakeMove(GridNode selectedNode, Vector2Int destination)
     {
@@ -67,6 +70,10 @@ public class Piece
     {
         MovesMade += 1;
     }
-    public virtual void AfterKillEffect() { }
-    public virtual void AfterDeathEffect() { }
+
+    public virtual void OnKillEffect() { }
+    public virtual void OnDeathEffect()
+    {
+        
+    }
 }
